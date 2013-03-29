@@ -187,13 +187,13 @@ unless platform_family?(%w{mac_os_x})
 
   if platform_family? 'windows'
     windows_batch "mysql-install-privileges" do
-      command "\"#{node['mysql']['mysql_bin']}\" -u root #{node['mysql']['server_root_password'].empty? ? '' : '-p' }\"#{node['mysql']['server_root_password']}\" < \"#{grants_path}\""
+      command "\"#{node['mysql']['mysql_bin']}\" -u root #{node['mysql']['server_root_password'].empty? ? '' : '--password=' }'#{node['mysql']['server_root_password']}' < \"#{grants_path}\""
       action :nothing
       subscribes :run, resources("template[#{grants_path}]"), :immediately
     end
   else
     execute "mysql-install-privileges" do
-      command %Q["#{node['mysql']['mysql_bin']}" -u root #{node['mysql']['server_root_password'].empty? ? '' : '-p' }"#{node['mysql']['server_root_password']}" < "#{grants_path}"]
+      command %Q["#{node['mysql']['mysql_bin']}" -u root #{node['mysql']['server_root_password'].empty? ? '' : '--password=' }'#{node['mysql']['server_root_password']}' < "#{grants_path}"]
       action :nothing
       subscribes :run, resources("template[#{grants_path}]"), :immediately
     end
